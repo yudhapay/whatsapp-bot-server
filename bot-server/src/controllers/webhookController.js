@@ -1,6 +1,7 @@
 import { logger } from '../utils/logger.js';
 import { messageService } from '../services/messageService.js';
 import { templateService } from '../services/templateService.js';
+import { aiService } from '../services/aiService.js';
 
 /**
  * Verifikasi webhook untuk GOWA API
@@ -60,26 +61,51 @@ const processMessage = async (message, value) => {
       const textBody = message.text || message.message || message.body;
       logger.info(`Text message: ${textBody}`);
 
-      // Parse pesan untuk ekstrak informasi template
-      const templateInfo = parseTemplateMessage(textBody);
+      // Parse pesan dengan AI untuk ekstrak informasi template
+      const aiParseResult = await aiService.parseMessage(textBody);
       
-      if (templateInfo) {
+      if (aiParseResult.success && aiParseResult.data) {
+        const { data } = aiParseResult;
+        
         // Ambil template dari Supabase
-        const template = await templateService.getTemplate(templateInfo.templateName);
+        const template = await templateService.getTemplate(data.template);
         
         if (template) {
           // Generate dokumen dengan data yang diisi
-          const generatedDoc = await templateService.generateDocument(template, templateInfo.data);
+          const generatedDoc = await templateService.generateDocument(template, {
+            nama: data.name,
+            lokasi: data.location,
+            tanggal: data.date
+          });
           
           // Kirim dokumen ke user
-          await messageService.sendDocument(from, generatedDoc, templateInfo.templateName);
+          await messageService.sendDocument(from, generatedDoc, `${data.template}.docx`);
         } else {
           // Template tidak ditemukan
-          await messageService.sendText(from, `Template "${templateInfo.templateName}" tidak ditemukan. Silakan coba template yang tersedia.`);
+          await messageService.sendText(from, `Template "${data.template}" tidak ditemukan. Silakan coba template yang tersedia.`);
         }
       } else {
-        // Pesan tidak sesuai format, kirim bantuan
-        await messageService.sendText(from, getHelpMessage());
+        // Fallback ke parsing manual
+        const templateInfo = parseTemplateMessage(textBody);
+        
+        if (templateInfo) {
+          // Ambil template dari Supabase
+          const template = await templateService.getTemplate(templateInfo.templateName);
+          
+          if (template) {
+            // Generate dokumen dengan data yang diisi
+            const generatedDoc = await templateService.generateDocument(template, templateInfo.data);
+            
+            // Kirim dokumen ke user
+            await messageService.sendDocument(from, generatedDoc, templateInfo.templateName);
+          } else {
+            // Template tidak ditemukan
+            await messageService.sendText(from, `Template "${templateInfo.templateName}" tidak ditemukan. Silakan coba template yang tersedia.`);
+          }
+        } else {
+          // Pesan tidak sesuai format, kirim bantuan
+          await messageService.sendText(from, getHelpMessage());
+        }
       }
     }
     // Handle document messages (jika user mengirim dokumen)
