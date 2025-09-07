@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: whatsapp-bot
+    name: whatsapp-bot-server-v2
     env: node
     plan: free
     region: singapore
