@@ -16,19 +16,13 @@ class MessageService {
 
   /**
    * Kirim pesan teks ke WhatsApp menggunakan GOWA API
+   * PRODUCTION VERSION - No development mode check
    */
   async sendText(to, message) {
     try {
-      // Development mode - log instead of sending
-      if (process.env.NODE_ENV === 'development') {
-        logger.info(`[DEV MODE] Would send text to ${to}: ${message}`);
-        return { status: 'success', mode: 'development' };
-      }
-
       const url = `${this.apiUrl}/send/message`;
       
-      logger.info(`API URL: ${this.apiUrl}`);
-      logger.info(`Full URL: ${url}`);
+      logger.info(`Sending text to ${to}: ${message.substring(0, 50)}...`);
       
       const payload = {
         phone: to,
@@ -52,16 +46,13 @@ class MessageService {
 
   /**
    * Kirim dokumen ke WhatsApp menggunakan GOWA API
+   * PRODUCTION VERSION - No development mode check
    */
   async sendDocument(to, documentBuffer, filename) {
     try {
-      // Development mode - log instead of sending
-      if (process.env.NODE_ENV === 'development') {
-        logger.info(`[DEV MODE] Would send document to ${to}: ${filename} (${documentBuffer.length} bytes)`);
-        return { status: 'success', mode: 'development' };
-      }
-
       const url = `${this.apiUrl}/send/file`;
+      
+      logger.info(`Sending document to ${to}: ${filename} (${documentBuffer.length} bytes)`);
       
       // Create FormData for multipart/form-data
       const formData = new FormData();
@@ -115,8 +106,8 @@ class MessageService {
 
       const response = await axios.post(url, payload, {
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.webhookToken}`
         }
       });
 
@@ -126,6 +117,56 @@ class MessageService {
       logger.error('Error sending template message:', error.response?.data || error.message);
       throw error;
     }
+  }
+
+  /**
+   * Kirim pesan status/notifikasi
+   */
+  async sendStatus(to, status, message) {
+    try {
+      const statusMessages = {
+        processing: '⏳ Sedang memproses dokumen Anda...',
+        success: '✅ Dokumen berhasil dibuat!',
+        error: '❌ Terjadi kesalahan saat membuat dokumen.',
+        not_found: '❌ Template tidak ditemukan.'
+      };
+
+      const statusMessage = statusMessages[status] || message;
+      return await this.sendText(to, statusMessage);
+    } catch (error) {
+      logger.error('Error sending status message:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Kirim pesan bantuan
+   */
+  async sendHelp(to) {
+    const helpMessage = `🤖 *WhatsApp Template Bot*
+
+*Cara menggunakan:*
+Kirim pesan dengan format:
+\`buat [nama_template] untuk [nama] di [lokasi] [tanggal]\`
+
+*Contoh:*
+\`buat berita acara untuk Andi di Jakarta 8 September 2024\`
+
+*Template yang tersedia:*
+- berita acara
+- surat undangan
+- surat keterangan
+- surat perjanjian
+- surat pernyataan
+
+*Fitur:*
+✅ Generate dokumen otomatis
+✅ Upload template baru via web admin
+✅ Support format Word (.docx)
+
+Ketik \`help\` untuk melihat pesan ini lagi.`;
+
+    return await this.sendText(to, helpMessage);
   }
 }
 

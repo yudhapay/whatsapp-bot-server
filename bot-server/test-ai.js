@@ -19,12 +19,15 @@ async function testAI() {
     console.log(`📝 Testing: "${message}"`);
     
     try {
+      const startTime = Date.now();
       const result = await aiService.parseMessage(message);
+      const endTime = Date.now();
       
       if (result.success) {
         console.log(`✅ Success:`, result.data);
         console.log(`🎯 Confidence: ${result.confidence}%`);
         console.log(`🔧 Source: ${result.source || 'rule-based'}`);
+        console.log(`⏱️  Response Time: ${endTime - startTime}ms`);
       } else {
         console.log(`❌ Failed:`, result.error);
       }

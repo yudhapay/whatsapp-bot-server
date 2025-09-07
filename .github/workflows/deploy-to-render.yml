@@ -1,0 +1,75 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches: [ main, production ]
+    paths:
+      - 'bot-server/**'
+      - 'admin-web/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'bot-server/**'
+      - 'admin-web/**'
+
+jobs:
+  deploy-bot-server:
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: bot-server/package-lock.json
+        
+    - name: Install dependencies
+      working-directory: ./bot-server
+      run: npm ci --production
+      
+    - name: Run tests
+      working-directory: ./bot-server
+      run: |
+        if [ -f "test-ai.js" ]; then
+          node test-ai.js
+        fi
+        
+    - name: Deploy to Render
+      uses: johnbeynon/render-deploy-action@v0.0.8
+      with:
+        service-id: ${{ secrets.RENDER_SERVICE_ID }}
+        api-key: ${{ secrets.RENDER_API_KEY }}
+        
+  deploy-admin-web:
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: admin-web/package-lock.json
+        
+    - name: Install dependencies
+      working-directory: ./admin-web
+      run: npm ci
+      
+    - name: Build admin web
+      working-directory: ./admin-web
+      run: npm run build
+      
+    - name: Deploy admin web to Render
+      uses: johnbeynon/render-deploy-action@v0.0.8
+      with:
+        service-id: ${{ secrets.RENDER_ADMIN_SERVICE_ID }}
+        api-key: ${{ secrets.RENDER_API_KEY }}

@@ -1,16 +1,16 @@
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { logger } from '../utils/logger.js';
 
 /**
  * AI Service untuk meningkatkan kecerdasan chatbot
- * Menggunakan OpenAI API untuk natural language processing
+ * Menggunakan Google Gemini sebagai AI provider utama
  */
 class AIService {
   constructor() {
-    // Initialize OpenAI
-    this.openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY || 'your-openai-api-key-here'
-    });
+    // Initialize Google Gemini
+    this.gemini = new GoogleGenerativeAI(
+      process.env.GEMINI_API_KEY || 'your-gemini-api-key-here'
+    );
 
     this.templateKeywords = {
       'berita acara': ['berita', 'acara', 'laporan', 'report'],
@@ -30,8 +30,8 @@ class AIService {
    */
   async parseMessage(message) {
     try {
-      // Coba AI parsing dulu, fallback ke rule-based
-      const aiResult = await this.parseWithAI(message);
+      // Coba Gemini AI parsing dulu, fallback ke rule-based
+      const aiResult = await this.parseWithGemini(message);
       if (aiResult.success) {
         return aiResult;
       }
@@ -64,7 +64,8 @@ class AIService {
       return {
         success: true,
         data: validatedData,
-        confidence: this.calculateConfidence(validatedData)
+        confidence: this.calculateConfidence(validatedData),
+        source: 'rule-based'
       };
       
     } catch (error) {
@@ -77,15 +78,18 @@ class AIService {
     }
   }
 
+
   /**
-   * Parse dengan OpenAI API (lebih pintar)
+   * Parse dengan Google Gemini API
    */
-  async parseWithAI(message) {
+  async parseWithGemini(message) {
     try {
-      if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'your-openai-api-key-here') {
-        logger.info('OpenAI API key not set, using fallback parsing');
+      if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === 'your-gemini-api-key-here') {
+        logger.info('Gemini API key not set, using fallback parsing');
         return { success: false };
       }
+
+      const model = this.gemini.getGenerativeModel({ model: "gemini-1.5-flash" });
 
       const prompt = `
 Anda adalah AI assistant untuk parsing pesan WhatsApp. Ekstrak informasi dari pesan user untuk membuat dokumen template.
@@ -117,27 +121,23 @@ Output: {"template": "surat undangan", "name": "Siti", "location": "Bandung", "d
 Jika tidak bisa mengekstrak informasi lengkap, gunakan nilai default yang masuk akal.
 `;
 
-      const response = await this.openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content: "Anda adalah AI assistant yang ahli dalam parsing pesan bahasa Indonesia untuk ekstrak informasi dokumen template."
-          },
-          {
-            role: "user",
-            content: prompt
-          }
-        ],
-        max_tokens: 200,
-        temperature: 0.1
-      });
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const aiResponse = response.text().trim();
+      
+      logger.info('Gemini Response:', aiResponse);
 
-      const aiResponse = response.choices[0].message.content.trim();
-      logger.info('OpenAI Response:', aiResponse);
-
+      // Clean response from markdown formatting
+      let cleanResponse = aiResponse;
+      if (cleanResponse.includes('```json')) {
+        cleanResponse = cleanResponse.replace(/```json\s*/g, '').replace(/```\s*$/g, '');
+      }
+      if (cleanResponse.includes('```')) {
+        cleanResponse = cleanResponse.replace(/```\s*/g, '');
+      }
+      
       // Parse JSON response
-      const parsedData = JSON.parse(aiResponse);
+      const parsedData = JSON.parse(cleanResponse);
       
       // Validasi data
       const validatedData = this.validateAndFixData(parsedData);
@@ -145,12 +145,12 @@ Jika tidak bisa mengekstrak informasi lengkap, gunakan nilai default yang masuk 
       return {
         success: true,
         data: validatedData,
-        confidence: 95, // AI parsing lebih confident
-        source: 'openai'
+        confidence: 95, // Gemini sebagai AI provider utama
+        source: 'gemini'
       };
 
     } catch (error) {
-      logger.error('OpenAI parsing error:', error);
+      logger.error('Gemini parsing error:', error);
       return { success: false };
     }
   }
