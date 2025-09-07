@@ -81,9 +81,9 @@ echo "4. Monitor logs for any issues"
 echo ""
 
 print_info "Service Endpoints (after deployment):"
-echo "- Bot Server: https://whatsapp-bot-88061.onrender.com"
-echo "- Health Check: https://whatsapp-bot-88061.onrender.com/health"
-echo "- Webhook: https://whatsapp-bot-88061.onrender.com/webhook"
+echo "- Bot Server: https://whatsapp-bot-server-v2.onrender.com"
+echo "- Health Check: https://whatsapp-bot-server-v2.onrender.com/health"
+echo "- Webhook: https://whatsapp-bot-server-v2.onrender.com/webhook"
 echo ""
 
 print_status "Production monitoring setup complete! 🎉"

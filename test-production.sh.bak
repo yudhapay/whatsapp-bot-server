@@ -29,7 +29,7 @@ print_info() {
 }
 
 # Production URLs
-BOT_SERVER_URL="https://whatsapp-bot-88061.onrender.com"
+BOT_SERVER_URL="https://whatsapp-bot-server-v2.onrender.com"
 HEALTH_ENDPOINT="$BOT_SERVER_URL/health"
 WEBHOOK_ENDPOINT="$BOT_SERVER_URL/webhook"
 

@@ -48,7 +48,7 @@ echo ""
 # Test different endpoints
 print_info "3. Testing Service Endpoints..."
 
-BOT_URL="https://whatsapp-bot-88061.onrender.com"
+BOT_URL="https://whatsapp-bot-server-v2.onrender.com"
 
 # Test root endpoint
 echo "Testing root endpoint: $BOT_URL"
