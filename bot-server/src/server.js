@@ -46,7 +46,7 @@ logger.info(`Supabase URL: ${supabaseUrl ? 'Configured' : 'Missing'}`);
 logger.info(`WhatsApp API URL: ${process.env.WHATSAPP_API_URL ? 'Configured' : 'Missing'}`);
 
 // Middleware
-app.use(helmet());
+// app.use(helmet()); // Disabled for debugging
 app.use(cors());
 app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
