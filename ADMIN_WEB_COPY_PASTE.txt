@@ -1,0 +1,13 @@
+=== ADMIN WEB ENVIRONMENT VARIABLES ===
+
+1. VITE_SUPABASE_URL
+https://cwixdvfffqjeyhbvxsph.supabase.co
+
+2. VITE_SUPABASE_ANON_KEY
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3aXhkdmZmZnFqZXloYnZ4c3BoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyNzkzNTEsImV4cCI6MjA3Mjg1NTM1MX0.m6VyCTNUuxEsSbDb7v0fem_wx7rlTjiyrg1Yoym04x8
+
+3. VITE_APP_NAME
+WhatsApp Template Admin
+
+4. VITE_APP_VERSION
+1.0.0
