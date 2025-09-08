@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Script to update Render Service IDs in GitHub Secrets
+# Run this script after getting the actual Service IDs from Render dashboard
+
+echo "=== Update Render Service IDs ==="
+echo ""
+echo "Please get the following information from your Render dashboard:"
+echo "1. Bot Server Service ID"
+echo "2. Admin Web Service ID" 
+echo "3. Render API Key"
+echo ""
+echo "Then run these commands with the actual values:"
+echo ""
+echo "# Update Render API Key"
+echo "gh secret set RENDER_API_KEY --body 'your_actual_render_api_key'"
+echo ""
+echo "# Update Bot Server Service ID"
+echo "gh secret set RENDER_SERVICE_ID_V2 --body 'your_bot_service_id'"
+echo ""
+echo "# Update Admin Web Service ID"
+echo "gh secret set RENDER_ADMIN_SERVICE_ID_V2 --body 'your_admin_service_id'"
+echo ""
+echo "=== How to get Service IDs from Render Dashboard ==="
+echo "1. Go to https://dashboard.render.com"
+echo "2. Click on your service"
+echo "3. Go to Settings tab"
+echo "4. Copy the Service ID from the General section"
+echo ""
+echo "=== How to get Render API Key ==="
+echo "1. Go to https://dashboard.render.com/account/api-keys"
+echo "2. Create a new API key or copy existing one"
+echo ""
