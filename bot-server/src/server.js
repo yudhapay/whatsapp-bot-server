@@ -14,6 +14,22 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Validate required environment variables
+const requiredEnvVars = [
+  'SUPABASE_URL',
+  'SUPABASE_SERVICE_ROLE_KEY',
+  'WHATSAPP_API_URL',
+  'WHATSAPP_USERNAME',
+  'WHATSAPP_PASSWORD',
+  'WHATSAPP_WEBHOOK_TOKEN'
+];
+
+const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
+if (missingEnvVars.length > 0) {
+  logger.error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);
+  process.exit(1);
+}
+
 // Initialize Supabase client
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -21,6 +37,13 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Initialize template service with Supabase client
 templateService.setSupabaseClient(supabase);
+
+// Log startup information
+logger.info('Starting WhatsApp Bot Server...');
+logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
+logger.info(`Port: ${PORT}`);
+logger.info(`Supabase URL: ${supabaseUrl ? 'Configured' : 'Missing'}`);
+logger.info(`WhatsApp API URL: ${process.env.WHATSAPP_API_URL ? 'Configured' : 'Missing'}`);
 
 // Middleware
 app.use(helmet());
