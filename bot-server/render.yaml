@@ -16,19 +16,21 @@ services:
         value: 3000
       - key: LOG_LEVEL
         value: info
+      # Environment variables will be set via Render dashboard or GitHub Actions
+      # The following are placeholders - actual values should be set in Render dashboard
       - key: WHATSAPP_API_URL
-        value: https://gowa-gh2m5ozca4dh.wortel.sumopod.my.id
+        value: "https://gowa-gh2m5ozca4dh.wortel.sumopod.my.id"
       - key: WHATSAPP_USERNAME
-        value: 0iK2Kv4m
+        value: "0iK2Kv4m"
       - key: WHATSAPP_PASSWORD
-        value: QUWlXsiaTHFBoSBM0WPtzRdQ
+        value: "QUWlXsiaTHFBoSBM0WPtzRdQ"
       - key: WHATSAPP_WEBHOOK_TOKEN
-        value: test_webhook_token_123
+        value: "test_webhook_token_123"
       - key: SUPABASE_URL
-        value: https://cwixdvfffqjeyhbvxsph.supabase.co
+        value: "https://cwixdvfffqjeyhbvxsph.supabase.co"
       - key: SUPABASE_ANON_KEY
-        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3aXhkdmZmZnFqZXloYnZ4c3BoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyNzkzNTEsImV4cCI6MjA3Mjg1NTM1MX0.m6VyCTNUuxEsSbDb7v0fem_wx7rlTjiyrg1Yoym04x8
+        value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3aXhkdmZmZnFqZXloYnZ4c3BoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyNzkzNTEsImV4cCI6MjA3Mjg1NTM1MX0.m6VyCTNUuxEsSbDb7v0fem_wx7rlTjiyrg1Yoym04x8"
       - key: SUPABASE_SERVICE_ROLE_KEY
-        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3aXhkdmZmZnFqZXloYnZ4c3BoIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzI3OTM1MSwiZXhwIjoyMDcyODU1MzUxfQ.IJSWJBcQLtnctjVArr9UeN-bcd_gDzUlUXKqIHOoeMA
+        value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3aXhkdmZmZnFqZXloYnZ4c3BoIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzI3OTM1MSwiZXhwIjoyMDcyODU1MzUxfQ.IJSWJBcQLtnctjVArr9UeN-bcd_gDzUlUXKqIHOoeMA"
       - key: GEMINI_API_KEY
-        value: AIzaSyAAds8Bj0-0xY7n9ZEk4jYeCFdYfYzVZmk
+        value: "AIzaSyAAds8Bj0-0xY7n9ZEk4jYeCFdYfYzVZmk"

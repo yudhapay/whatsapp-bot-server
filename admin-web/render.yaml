@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: whatsapp-admin-web
+    env: static
+    plan: free
+    region: singapore
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    autoDeploy: true
+    branch: main
+    envVars:
+      - key: VITE_SUPABASE_URL
+        value: "https://cwixdvfffqjeyhbvxsph.supabase.co"
+      - key: VITE_SUPABASE_ANON_KEY
+        value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3aXhkdmZmZnFqZXloYnZ4c3BoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyNzkzNTEsImV4cCI6MjA3Mjg1NTM1MX0.m6VyCTNUuxEsSbDb7v0fem_wx7rlTjiyrg1Yoym04x8"
+      - key: VITE_APP_NAME
+        value: "WhatsApp Template Admin"
+      - key: VITE_APP_VERSION
+        value: "1.0.0"

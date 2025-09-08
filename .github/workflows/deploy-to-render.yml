@@ -48,14 +48,14 @@ jobs:
           NODE_ENV=production
           PORT=3000
           LOG_LEVEL=info
-          WHATSAPP_API_URL=https://gowa-gh2m5ozca4dh.wortel.sumopod.my.id
-          WHATSAPP_USERNAME=0iK2Kv4m
-          WHATSAPP_PASSWORD=QUWlXsiaTHFBoSBM0WPtzRdQ
-          WHATSAPP_WEBHOOK_TOKEN=test_webhook_token_123
-          SUPABASE_URL=https://cwixdvfffqjeyhbvxsph.supabase.co
-          SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3aXhkdmZmZnFqZXloYnZ4c3BoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyNzkzNTEsImV4cCI6MjA3Mjg1NTM1MX0.m6VyCTNUuxEsSbDb7v0fem_wx7rlTjiyrg1Yoym04x8
-          SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3aXhkdmZmZnFqZXloYnZ4c3BoIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzI3OTM1MSwiZXhwIjoyMDcyODU1MzUxfQ.IJSWJBcQLtnctjVArr9UeN-bcd_gDzUlUXKqIHOoeMA
-          GEMINI_API_KEY=AIzaSyAAds8Bj0-0xY7n9ZEk4jYeCFdYfYzVZmk
+          WHATSAPP_API_URL=${{ secrets.WHATSAPP_API_URL }}
+          WHATSAPP_USERNAME=${{ secrets.WHATSAPP_USERNAME }}
+          WHATSAPP_PASSWORD=${{ secrets.WHATSAPP_PASSWORD }}
+          WHATSAPP_WEBHOOK_TOKEN=${{ secrets.WHATSAPP_WEBHOOK_TOKEN }}
+          SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
         
   deploy-admin-web:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
@@ -86,7 +86,7 @@ jobs:
         service-id: ${{ secrets.RENDER_ADMIN_SERVICE_ID_V2 }}
         api-key: ${{ secrets.RENDER_API_KEY }}
         environment-variables: |
-          VITE_SUPABASE_URL=https://cwixdvfffqjeyhbvxsph.supabase.co
-          VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3aXhkdmZmZnFqZXloYnZ4c3BoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyNzkzNTEsImV4cCI6MjA3Mjg1NTM1MX0.m6VyCTNUuxEsSbDb7v0fem_wx7rlTjiyrg1Yoym04x8
+          VITE_SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
           VITE_APP_NAME=WhatsApp Template Admin
           VITE_APP_VERSION=1.0.0
