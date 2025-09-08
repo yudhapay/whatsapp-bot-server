@@ -11,42 +11,10 @@ export const verifyWebhook = (req, res, next) => {
       return next();
     }
 
-    // Development mode - skip verification
-    if (process.env.NODE_ENV === 'development') {
-      logger.info('Skipping webhook verification in development mode');
-      return next();
-    }
+    // Skip verification untuk semua request (untuk GOWA API)
+    logger.info('Skipping webhook verification - allowing all requests');
+    return next();
 
-    // Production mode - verify signature
-    const signature = req.headers['x-hub-signature-256'];
-    const webhookSecret = process.env.WHATSAPP_WEBHOOK_TOKEN || process.env.WHATSAPP_WEBHOOK_SECRET;
-
-    logger.info(`NODE_ENV: ${process.env.NODE_ENV}`);
-    logger.info(`Signature: ${signature}`);
-    logger.info(`Webhook Secret: ${webhookSecret ? 'Present' : 'Missing'}`);
-
-    if (!signature || !webhookSecret || webhookSecret.trim() === '') {
-      logger.info('No webhook secret configured, allowing request');
-      return next();
-    }
-
-    // Verify signature
-    const expectedSignature = crypto
-      .createHmac('sha256', webhookSecret)
-      .update(JSON.stringify(req.body))
-      .digest('hex');
-
-    const providedSignature = signature.replace('sha256=', '');
-
-    if (providedSignature !== expectedSignature) {
-      logger.warn('Invalid webhook signature, allowing request for testing');
-      logger.warn(`Expected: ${expectedSignature}`);
-      logger.warn(`Provided: ${providedSignature}`);
-      return next();
-    }
-
-    logger.info('Webhook signature verified successfully');
-    next();
   } catch (error) {
     logger.error('Error in webhook verification:', error);
     // Allow request to continue even if verification fails
