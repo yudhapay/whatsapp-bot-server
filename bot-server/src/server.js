@@ -14,29 +14,29 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Validate required environment variables
-const requiredEnvVars = [
-  'SUPABASE_URL',
-  'SUPABASE_SERVICE_ROLE_KEY',
-  'WHATSAPP_API_URL',
-  'WHATSAPP_USERNAME',
-  'WHATSAPP_PASSWORD',
-  'WHATSAPP_WEBHOOK_TOKEN'
-];
+// Validate required environment variables (disabled for debugging)
+// const requiredEnvVars = [
+//   'SUPABASE_URL',
+//   'SUPABASE_SERVICE_ROLE_KEY',
+//   'WHATSAPP_API_URL',
+//   'WHATSAPP_USERNAME',
+//   'WHATSAPP_PASSWORD',
+//   'WHATSAPP_WEBHOOK_TOKEN'
+// ];
 
-const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
-if (missingEnvVars.length > 0) {
-  logger.error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);
-  process.exit(1);
-}
+// const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
+// if (missingEnvVars.length > 0) {
+//   logger.error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);
+//   process.exit(1);
+// }
 
-// Initialize Supabase client
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Initialize Supabase client (disabled for debugging)
+// const supabaseUrl = process.env.SUPABASE_URL;
+// const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+// const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Initialize template service with Supabase client
-templateService.setSupabaseClient(supabase);
+// templateService.setSupabaseClient(supabase);
 
 // Log startup information
 logger.info('Starting WhatsApp Bot Server...');
@@ -52,11 +52,11 @@ app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Make supabase available to routes
-app.use((req, res, next) => {
-  req.supabase = supabase;
-  next();
-});
+// Make supabase available to routes (disabled for debugging)
+// app.use((req, res, next) => {
+//   req.supabase = supabase;
+//   next();
+// });
 
 // Routes
 app.use('/webhook', webhookRoutes);
