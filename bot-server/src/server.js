@@ -1,12 +1,12 @@
 import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet';
+// import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import { createClient } from '@supabase/supabase-js';
-import webhookRoutes from './routes/webhook.js';
+// import { createClient } from '@supabase/supabase-js';
+// import webhookRoutes from './routes/webhook.js';
 import { logger } from './utils/logger.js';
-import { templateService } from './services/templateService.js';
+// import { templateService } from './services/templateService.js';
 
 // Load environment variables
 dotenv.config();
@@ -58,8 +58,8 @@ app.use(express.urlencoded({ extended: true }));
 //   next();
 // });
 
-// Routes
-app.use('/webhook', webhookRoutes);
+// Routes (disabled for debugging)
+// app.use('/webhook', webhookRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
