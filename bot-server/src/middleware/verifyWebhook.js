@@ -25,8 +25,8 @@ export const verifyWebhook = (req, res, next) => {
     logger.info(`Signature: ${signature}`);
     logger.info(`Webhook Secret: ${webhookSecret ? 'Present' : 'Missing'}`);
 
-    if (!signature || !webhookSecret) {
-      logger.warn('Missing signature or webhook secret, allowing request for testing');
+    if (!signature || !webhookSecret || webhookSecret.trim() === '') {
+      logger.info('No webhook secret configured, allowing request');
       return next();
     }
 
