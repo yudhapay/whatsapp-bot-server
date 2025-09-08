@@ -70,6 +70,17 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Test endpoint for debugging
+app.post('/test', (req, res) => {
+  logger.info('Test endpoint called');
+  logger.info('Request body:', req.body);
+  res.json({ 
+    status: 'success', 
+    message: 'Test endpoint working',
+    body: req.body
+  });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   logger.error('Unhandled error:', err);
