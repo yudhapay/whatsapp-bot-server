@@ -166,3 +166,4 @@ Jika ada masalah, cek:
 3. Supabase connection
 4. WhatsApp Go API status
 
+# Test trigger
