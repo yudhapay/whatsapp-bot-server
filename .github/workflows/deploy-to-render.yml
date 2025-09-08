@@ -44,7 +44,6 @@ jobs:
       with:
         service-id: ${{ secrets.RENDER_SERVICE_ID_V2 }}
         api-key: ${{ secrets.RENDER_API_KEY }}
-        
   deploy-admin-web:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
     runs-on: ubuntu-latest
