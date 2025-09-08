@@ -24,6 +24,7 @@ export const handleMessage = async (req, res) => {
   try {
     const body = req.body;
     logger.info('Received GOWA webhook:', JSON.stringify(body, null, 2));
+    logger.info('Request headers:', req.headers);
 
     // GOWA API menggunakan format yang berbeda
     // Cek apakah ada pesan masuk
@@ -41,6 +42,7 @@ export const handleMessage = async (req, res) => {
     res.status(200).json({ status: 'success' });
   } catch (error) {
     logger.error('Error handling webhook:', error);
+    logger.error('Error stack:', error.stack);
     res.status(500).json({ error: 'Internal server error' });
   }
 };

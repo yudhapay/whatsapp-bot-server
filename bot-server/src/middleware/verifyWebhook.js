@@ -6,13 +6,17 @@ import { logger } from '../utils/logger.js';
  */
 export const verifyWebhook = (req, res, next) => {
   try {
+    logger.info(`Webhook middleware: ${req.method} ${req.path}`);
+    logger.info('Request headers:', req.headers);
+    
     // Skip verification untuk GET request (webhook verification)
     if (req.method === 'GET') {
+      logger.info('GET request - allowing');
       return next();
     }
 
     // Skip verification untuk semua request (untuk GOWA API)
-    logger.info('Skipping webhook verification - allowing all requests');
+    logger.info('POST request - skipping verification, allowing all requests');
     return next();
 
   } catch (error) {
